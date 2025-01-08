@@ -20,6 +20,7 @@ export const DDBLink = new Entity({
     indexes: {
         byShortCode: {
             pk: {
+                casing: 'none',
                 field: 'pk',
                 composite: ['shortcode']
             }
@@ -27,6 +28,7 @@ export const DDBLink = new Entity({
         byUrl: {
             index: 'longUrlIndex',
             pk: {
+                casing: 'none',
                 field: 'gsi1pk',
                 composite: ['url']
             },

@@ -19,6 +19,21 @@ app.get('/', async (req, res) => {
 });
 
 app.post('/', async (req, res) => {
+    // try and find if the URL has not been created before
+    const url = req.body.url;
+    const response = await DDBLink.query.byUrl({ url }).go();
+
+    if (response.data.length > 0) {
+        const shortened = response.data[0];
+
+        res.send(JSON.stringify({
+            url,
+            shortCode: shortened?.shortcode
+        }));
+
+        return;
+    }
+
     let shortCode: string = '';
     for (let i = 0; i < 7; i++) {
         shortCode = shortCode + alphabet[Math.floor(Math.random() * alphabet.length)];
@@ -35,6 +50,22 @@ app.post('/', async (req, res) => {
         url: req.body.url,
         shortcode: shortened
     }));
+});
+
+app.get('/:shortCode', async (req, res) => {
+    const shortCode = `${baseDomain}/${req.params.shortCode}`;
+    const response = await DDBLink.get({
+        shortcode: shortCode
+    }).go();
+
+    console.log(`shortCode: ${req.params.shortCode}, response`, response);
+
+    if (!response.data?.url) {
+        res.status(404).end();
+        return;
+    }
+
+    res.redirect(response.data!.url);
 });
 
 app.listen(port, () => {
