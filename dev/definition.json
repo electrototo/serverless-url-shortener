@@ -1,0 +1,30 @@
+{
+    "TableName": "links",
+    "KeySchema": [
+      {
+        "AttributeName": "pk",
+        "KeyType": "HASH"
+      }
+    ],
+    "AttributeDefinitions": [
+      {
+        "AttributeName": "pk",
+        "AttributeType": "S"
+      },
+      {
+        "AttributeName": "gsi1pk",
+        "AttributeType": "S"
+      }
+    ],
+    "GlobalSecondaryIndexes": [{
+      "IndexName": "longUrlIndex",
+      "KeySchema": [{
+        "AttributeName": "gsi1pk",
+        "KeyType": "HASH"
+      }],
+      "Projection": {
+        "ProjectionType": "ALL"
+      }
+    }],
+    "BillingMode": "PAY_PER_REQUEST"
+  }

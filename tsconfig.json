@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "esModuleInterop": true,
+    "strict": true,
+    "moduleResolution": "node",
+    "noEmit": true,
+ 
+    "outDir": "dist",
+ 
+    "forceConsistentCasingInFileNames": true, 
+    "skipLibCheck": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitAny": true,
+   
+    "baseUrl": ".",
+    "resolveJsonModule": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules"]
+ }

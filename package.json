@@ -1,0 +1,27 @@
+{
+  "name": "shortener",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "dev": "./dev.sh && nodemon src/index.ts",
+    "dev:init": "ts-node dev/create-ddb-table.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.724.0",
+    "cors": "^2.8.5",
+    "electrodb": "^3.0.1",
+    "express": "^4.21.2",
+    "ts-node": "^10.9.2"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.5",
+    "nodemon": "^3.1.9",
+    "typescript": "^5.7.2"
+  }
+}
