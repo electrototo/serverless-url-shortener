@@ -1,6 +1,6 @@
 import cors from 'cors';
 import express, { Express, Request } from 'express';
-import { DDBLink } from './models/dynamodb/link';
+import { DDBLink } from './models/link';
 
 const app: Express = express();
 const port = process.env.PORT || 3000;
