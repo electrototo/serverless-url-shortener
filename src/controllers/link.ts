@@ -1,13 +1,15 @@
 import { DDBLink, Link } from "../models/link";
 
 export interface LinkControllerProps {
+    baseDomain: string;
 }
 
 export class LinkController {
     alphabet: string = 'abcdefghijklmonpqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
-    baseDomain = 'https://s.to';
+    baseDomain: string;
 
     constructor(props: LinkControllerProps) {
+        this.baseDomain = props.baseDomain;
     }
 
     async retrieve(props: { shortcode?: string, url?: string }): Promise<Link | undefined> {

@@ -1,0 +1,1 @@
+export const BASE_DOMAIN = 'https://s.to';
