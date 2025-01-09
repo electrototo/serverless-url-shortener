@@ -39,4 +39,10 @@ router.post('/', async (req, res) => {
     res.send(JSON.stringify(output));
 });
 
+router.delete('/:shortcode', async (req, res) => {
+    await linkController.delete(req.params.shortcode);
+
+    res.status(200).send();
+});
+
 export default router;

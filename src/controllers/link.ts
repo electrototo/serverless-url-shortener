@@ -57,6 +57,12 @@ export class LinkController {
         }
     }
 
+    async delete(shortcode: string): Promise<void> {
+        await DDBLink.delete({
+            shortcode: `${this.baseDomain}/${shortcode}`
+        }).go();
+    }
+
     createShortCode(length: number = 7): string {
         let shortCode: string = '';
 
