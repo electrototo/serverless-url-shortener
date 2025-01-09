@@ -22,14 +22,21 @@ const CreateLinkInputSchema = z.object({
 
 const CreateLinkOutputSchema = z.object({
     url: z.string(),
-    shortcode: z.string()
+    shortcode: z.string(),
+    creationDate: z.string()
 });
 
 router.post('/', async (req, res) => {
     const input = CreateLinkInputSchema.parse(req.body);
     const link = await linkController.create(input.url);
 
-    res.send(JSON.stringify(link));
+    const output = CreateLinkOutputSchema.parse({
+        url: link.url,
+        shortcode: link.shortcode,
+        creationDate: link.creationDate
+    });
+
+    res.send(JSON.stringify(output));
 });
 
 export default router;

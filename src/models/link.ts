@@ -4,6 +4,7 @@ import { dynamodDBClient } from "../clients/dynamodb";
 export interface Link {
     url: string;
     shortcode: string;
+    creationDate: string;
 }
 
 export const DDBLink = new Entity({
@@ -20,6 +21,11 @@ export const DDBLink = new Entity({
         shortcode: {
             type: 'string',
             required: true
+        },
+        creationDate: {
+            type: 'string',
+            required: true,
+            default: new Date().toISOString()
         }
     },
     indexes: {

@@ -31,7 +31,8 @@ export class LinkController {
 
         return {
             url: entry.url,
-            shortcode: entry.shortcode
+            shortcode: entry.shortcode,
+            creationDate: entry.creationDate
         };
     }
 
@@ -51,14 +52,15 @@ export class LinkController {
 
         return {
             url: response.data.url,
-            shortcode: response.data.shortcode
+            shortcode: response.data.shortcode,
+            creationDate: response.data.creationDate
         }
     }
 
     createShortCode(length: number = 7): string {
         let shortCode: string = '';
 
-        for (let i = 0; i < 7; i++) {
+        for (let i = 0; i < length; i++) {
             shortCode = shortCode + this.alphabet[Math.floor(Math.random() * this.alphabet.length)];
         }
 

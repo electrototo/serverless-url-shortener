@@ -5,7 +5,7 @@ import mainRouter from './views/index';
 import apiRouter from './views/api/index';
 import { ZodError } from 'zod';
 
-export const app: Express = express();
+const app: Express = express();
 const port = process.env.PORT || 3000;
 
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
