@@ -1,0 +1,5 @@
+.active {
+    border-width: 3px;
+    border-radius: 1rem;
+    border-color: coral;
+}

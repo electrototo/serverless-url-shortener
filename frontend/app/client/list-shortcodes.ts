@@ -1,6 +1,8 @@
+import { Link } from "../models/link";
+
 export interface ListShortCodesResponse {
     cursor: string;
-    data: { url: string; shortcode: string; creationDate: string }[];
+    data: Link[];
 }
 
 export const listShortCodes = async (url: string): Promise<ListShortCodesResponse> => {

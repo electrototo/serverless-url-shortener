@@ -11,6 +11,8 @@ import { Col, Container, Row, Button, Stack, Modal } from 'react-bootstrap';
 import invariant from 'tiny-invariant';
 import { Table } from "../components/table";
 
+import { Link as LinkModel } from '../models/link';
+
 export const meta: MetaFunction = () => {
   return [
     { title: "New Remix App" },
@@ -18,9 +20,7 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export async function loader({
-  request
-}: LoaderFunctionArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   return await listLinks();
 }
 
@@ -37,7 +37,9 @@ export async function action({ params, request }: ActionFunctionArgs) {
 
 export default function Index() {
   const data = useLoaderData<typeof loader>();
-  const [showModal, setShowModal] = useState<boolean>(false);
+
+  const [ showModal, setShowModal ] = useState<boolean>(false);
+  const [ selectedValues, setSelectedValues ] = useState<LinkModel[]>([]);
 
   const handleClose = () => setShowModal(false);
   const handleShow = () => setShowModal(true);
@@ -69,7 +71,7 @@ export default function Index() {
 
       <Row className="justify-content-space-between">
         <Col>
-          <h1>Links</h1>
+            <h1>Links <span className="text-body-secondary fs-3">({selectedValues.length > 0 ? `${selectedValues.length}/` : ''}{data.length})</span></h1>
         </Col>
         <Col md={2} className="align-content-center">
           <Stack direction="horizontal" gap={2}>
@@ -98,7 +100,7 @@ export default function Index() {
             render: (element) => <a href={element.shortcode}>{element.shortcode}</a>
           }
         ]}
-        onSelect={() => console.log('select')} striped />
+        onSelect={(elements) => setSelectedValues(elements)} striped />
     </Container>
   );
 }

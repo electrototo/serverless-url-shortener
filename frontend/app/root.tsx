@@ -9,6 +9,7 @@ import {
 import type { LinksFunction } from "@remix-run/node";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './components/table.css';
 
 import { Container, Nav, Navbar } from 'react-bootstrap';
 
