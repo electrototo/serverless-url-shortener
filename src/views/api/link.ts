@@ -16,8 +16,27 @@ router.get('/', async (req, res) => {
     res.send(JSON.stringify(links));
 });
 
+const ListShortCodesForUrlResponse = z.object({
+    cursor: z.string().or(z.null()),
+    data: z.array(z.object({
+        url: z.string(),
+        shortcode: z.string(),
+        creationDate: z.string()
+    }))
+})
+
+router.get('/:safeUrl', async (req, res) => {
+    // decode the base64 encoded link
+
+    const decodedUrl = atob(req.params.safeUrl);
+    const urls = await linkController.retrieveURLShortCodes({ url: decodedUrl });
+
+    res.send(JSON.stringify(ListShortCodesForUrlResponse.parse(urls)));
+});
+
 const CreateLinkInputSchema = z.object({
-    url: z.string()
+    url: z.string(),
+    reuse: z.boolean().optional()
 });
 
 const CreateLinkOutputSchema = z.object({
@@ -28,7 +47,7 @@ const CreateLinkOutputSchema = z.object({
 
 router.post('/', async (req, res) => {
     const input = CreateLinkInputSchema.parse(req.body);
-    const link = await linkController.create(input.url);
+    const link = await linkController.create(input.url, input.reuse);
 
     const output = CreateLinkOutputSchema.parse({
         url: link.url,

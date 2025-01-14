@@ -1,11 +1,10 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { CSSProperties, FormEvent, useEffect, useReducer, useRef, useState } from "react";
-import { Link } from "../models/link";
 import { initialTableState, tableReducer } from "../redux/tableReducer";
 import { listLinks } from "../client/list-links";
 import { shortenLink as shortenLinkAPI } from "../client/shorten";
 
-import { Form, useLoaderData } from "@remix-run/react";
+import { Form, Link, useLoaderData } from "@remix-run/react";
 
 import { Col, Container, Table, Row, Button, Stack, Modal } from 'react-bootstrap';
 
@@ -94,11 +93,20 @@ export default function Index() {
         </thead>
         <tbody>
           {data.map(entry => {
+            const safeLink = btoa(entry.url)
+              .replace(/\+/g, '-')
+              .replace(/\//g, '_')
+              .replace(/=/g, '');
+
             return (
               <tr key={entry.id}>
                 <td style={{ width: '2rem' }}><input type="checkbox" /></td>
-                <td style={{ wordWrap: 'break-word' }}><a href={entry.url}>{entry.url}</a></td>
-                <td><a href={entry.shortcode}>{entry.shortcode}</a></td>
+                <td style={{ wordWrap: 'break-word' }}>
+                  <Link to={`/links/${safeLink}`}>{entry.url}</Link>
+                </td>
+                <td>
+                  <a href={entry.shortcode}>{entry.shortcode}</a>
+                </td>
               </tr>
             );
           })}

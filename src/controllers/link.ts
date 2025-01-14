@@ -1,5 +1,10 @@
 import { DDBLink, Link } from "../models/link";
 
+export interface Paginated<T> {
+    data: T[];
+    cursor: string | null;
+}
+
 export interface LinkControllerProps {
     baseDomain: string;
 }
@@ -10,6 +15,19 @@ export class LinkController {
 
     constructor(props: LinkControllerProps) {
         this.baseDomain = props.baseDomain;
+    }
+
+    async retrieveURLShortCodes(props: { url: string }): Promise<Paginated<Link>> {
+        const response = await DDBLink.query.byUrl({ url: props.url }).go();
+
+        return {
+            cursor: response.cursor,
+            data: response.data.map(entry => ({
+                url: entry.url,
+                shortcode: entry.shortcode,
+                creationDate: entry.creationDate
+            }))
+        };
     }
 
     async retrieve(props: { shortcode?: string, url?: string }): Promise<Link | undefined> {
@@ -36,11 +54,11 @@ export class LinkController {
         };
     }
 
-    async create(url: string): Promise<Link> {
+    async create(url: string, reuse?: boolean): Promise<Link> {
         // Will either shorten the link or return the already shortened version of the link
         const link: Link | undefined = await this.retrieve({ url });
 
-        if (link) {
+        if (link && reuse) {
             return link;
         }
 
