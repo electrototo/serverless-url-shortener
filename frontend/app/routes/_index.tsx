@@ -4,11 +4,12 @@ import { initialTableState, tableReducer } from "../redux/tableReducer";
 import { listLinks } from "../client/list-links";
 import { shortenLink as shortenLinkAPI } from "../client/shorten";
 
-import { Form, Link, useLoaderData } from "@remix-run/react";
+import { Form, Link, Links, useLoaderData } from "@remix-run/react";
 
-import { Col, Container, Table, Row, Button, Stack, Modal } from 'react-bootstrap';
+import { Col, Container, Row, Button, Stack, Modal } from 'react-bootstrap';
 
 import invariant from 'tiny-invariant';
+import { Table } from "../components/table";
 
 export const meta: MetaFunction = () => {
   return [
@@ -77,41 +78,27 @@ export default function Index() {
           </Stack>
         </Col>
       </Row>
-      <Table style={{ maxWidth: '100%', tableLayout: 'fixed' }} striped>
-        <thead>
-          <tr>
-            <th style={{ width: '2rem' }}>
-              <input type="checkbox" />
-            </th>
-            <th>
-              URL
-            </th>
-            <th>
-              Shortened
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map(entry => {
-            const safeLink = btoa(entry.url)
-              .replace(/\+/g, '-')
-              .replace(/\//g, '_')
-              .replace(/=/g, '');
+      <Table
+        data={data}
+        columns={[
+          {
+            selector: 'url',
+            displayName: 'URL',
+            render: (element) => {
+              const base64EncodedLink = btoa(element.url);
 
-            return (
-              <tr key={entry.id}>
-                <td style={{ width: '2rem' }}><input type="checkbox" /></td>
-                <td style={{ wordWrap: 'break-word' }}>
-                  <Link to={`/links/${safeLink}`}>{entry.url}</Link>
-                </td>
-                <td>
-                  <a href={entry.shortcode}>{entry.shortcode}</a>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </Table>
+              return (
+                <Link to={`/links/${base64EncodedLink}`}>{element.url}</Link>
+              );
+            }
+          },
+          {
+            selector: 'shortcode',
+            displayName: 'Shortened',
+            render: (element) => <a href={element.shortcode}>{element.shortcode}</a>
+          }
+        ]}
+        onSelect={() => console.log('select')} striped />
     </Container>
   );
 }

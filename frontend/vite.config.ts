@@ -16,10 +16,5 @@ export default defineConfig({
       serverModuleFormat: 'esm'
     }),
     tsconfigPaths(),
-  ],
-  build: {
-    commonjsOptions: {
-      transformMixedEsModules: true
-    }
-  }
+  ]
 });
