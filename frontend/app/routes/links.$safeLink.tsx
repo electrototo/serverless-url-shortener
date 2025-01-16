@@ -5,14 +5,15 @@ import invariant from "tiny-invariant";
 
 import moment from 'moment';
 import { Table } from "../components/table";
-import { listShortCodes } from "../client/list-shortcodes";
 import { Link } from "../models/link";
 import { useState } from "react";
+
+import { linkService } from "../client/link-service";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
     invariant(params.safeLink, 'safeLink parameter not specified');
 
-    return await listShortCodes(params.safeLink);
+    return await linkService.listShortcodes(params.safeLink);
 }
 
 export function ErrorBoundary() {

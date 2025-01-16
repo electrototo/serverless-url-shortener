@@ -1,8 +1,6 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { CSSProperties, FormEvent, useEffect, useReducer, useRef, useState } from "react";
 import { initialTableState, tableReducer } from "../redux/tableReducer";
-import { listLinks } from "../client/list-links";
-import { shortenLink as shortenLinkAPI } from "../client/shorten";
 
 import { Form, Link, Links, useLoaderData } from "@remix-run/react";
 
@@ -12,7 +10,7 @@ import invariant from 'tiny-invariant';
 import { Table } from "../components/table";
 
 import { Link as LinkModel } from '../models/link';
-import { deleteLink } from "../client/delete-link";
+import { linkService } from "../client/link-service";
 
 export const meta: MetaFunction = () => {
   return [
@@ -22,7 +20,7 @@ export const meta: MetaFunction = () => {
 };
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  return await listLinks();
+  return await linkService.listLinks();
 }
 
 export async function action({ params, request }: ActionFunctionArgs) {
@@ -31,7 +29,7 @@ export async function action({ params, request }: ActionFunctionArgs) {
 
   invariant(url, 'URL is not defined');
 
-  await Promise.all(url.map(entry => deleteLink(btoa(entry))));
+  await Promise.all(url.map(entry => linkService.deleteLink(btoa(entry))));
 
   return {};
 }
