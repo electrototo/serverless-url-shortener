@@ -76,8 +76,9 @@ export class LinkController {
     }
 
     async delete(shortcode: string): Promise<void> {
+        // The pk of the table is the whole shortened link
         await DDBLink.delete({
-            shortcode: `${this.baseDomain}/${shortcode}`
+            shortcode
         }).go();
     }
 

@@ -12,6 +12,7 @@ import invariant from 'tiny-invariant';
 import { Table } from "../components/table";
 
 import { Link as LinkModel } from '../models/link';
+import { deleteLink } from "../client/delete-link";
 
 export const meta: MetaFunction = () => {
   return [
@@ -26,11 +27,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export async function action({ params, request }: ActionFunctionArgs) {
   const formData = await request.formData();
-  const url = formData.get('url') as string;
+  const url = formData.getAll('url') as string[];
 
   invariant(url, 'URL is not defined');
 
-  await shortenLinkAPI(url);
+  await Promise.all(url.map(entry => deleteLink(btoa(entry))));
 
   return {};
 }
@@ -64,7 +65,7 @@ export default function Index() {
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secodary" onClick={handleClose}>Cancel</Button>
-            <Button variant="primary" onClick={handleClose} type="submit">Shorten</Button>
+            <Button variant="primary" onClick={handleClose} name="_action" value="create" type="submit">Shorten</Button>
           </Modal.Footer>
         </Form>
       </Modal>
@@ -74,10 +75,19 @@ export default function Index() {
             <h1>Links <span className="text-body-secondary fs-3">({selectedValues.length > 0 ? `${selectedValues.length}/` : ''}{data.length})</span></h1>
         </Col>
         <Col md={2} className="align-content-center">
-          <Stack direction="horizontal" gap={2}>
-            <Button variant="danger">Delete</Button>
-            <Button onClick={handleShow}>Shorten</Button>
-          </Stack>
+          <Form method="post">
+            <Stack direction="horizontal" gap={2}>
+              <Button variant="danger" type="submit" name="_action" value="delete">Delete</Button>
+              <Button onClick={handleShow}>Shorten</Button>
+            </Stack>
+            {
+              selectedValues.map(entry => {
+                return (
+                  <input key={entry.shortcode} type="hidden" name="url" value={entry.shortcode} />
+                );
+              })
+            }
+          </Form>
         </Col>
       </Row>
       <Table

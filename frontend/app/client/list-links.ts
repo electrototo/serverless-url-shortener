@@ -12,6 +12,7 @@ export const listLinks = async (): Promise<Link[]> => {
     return data.data.map(entry => ({
         id: entry.shortcode,
         url: entry.url,
-        shortcode: entry.shortcode
+        shortcode: entry.shortcode,
+        creationDate: entry.creationDate
     }));
 };

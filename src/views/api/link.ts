@@ -59,7 +59,10 @@ router.post('/', async (req, res) => {
 });
 
 router.delete('/:shortcode', async (req, res) => {
-    await linkController.delete(req.params.shortcode);
+    // Decode the B64 provided shortcode
+    const shortcode = atob(req.params.shortcode);
+
+    await linkController.delete(shortcode);
 
     res.status(200).send();
 });
