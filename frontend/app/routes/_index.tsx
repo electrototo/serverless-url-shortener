@@ -1,8 +1,6 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { CSSProperties, FormEvent, useEffect, useReducer, useRef, useState } from "react";
-import { initialTableState, tableReducer } from "../redux/tableReducer";
 
-import { Form, Link, Links, useLoaderData } from "@remix-run/react";
+import { Form, Link, useLoaderData } from "@remix-run/react";
 
 import { Col, Container, Row, Button, Stack, Modal } from 'react-bootstrap';
 
@@ -11,6 +9,7 @@ import { Table } from "../components/table";
 
 import { Link as LinkModel } from '../models/link';
 import { linkService } from "../client/link-service";
+import { useState } from "react";
 
 export const meta: MetaFunction = () => {
   return [
@@ -25,11 +24,16 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export async function action({ params, request }: ActionFunctionArgs) {
   const formData = await request.formData();
+  const action = formData.get('_action');
   const url = formData.getAll('url') as string[];
 
   invariant(url, 'URL is not defined');
 
-  await linkService.bulkDeleteLinks(url);
+  if (action === 'create') {
+    await linkService.shorten(url[0]);
+  } else if (action === 'delete') {
+    await linkService.bulkDeleteLinks(url);
+  }
 
   return {};
 }

@@ -143,7 +143,10 @@ export function Table<T>(props: TableProps<T>) {
             </thead>
             <tbody>
                 {
-                    props.data.map(entry => {
+                    props.data.length === 0 ? (<tr>
+                        <td colSpan={props.columns.length + 1} style={{ textAlign: 'center' }}>No data</td>
+                    </tr>)
+                    : props.data.map(entry => {
                         const isSelected = state.selectedEntries.find(stateEntry => stateEntry === entry) !== undefined;
 
                         return (
