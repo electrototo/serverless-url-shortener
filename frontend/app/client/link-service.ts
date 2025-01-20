@@ -1,3 +1,4 @@
+import { encode } from "punycode";
 import { Link } from "../models/link";
 
 export interface LinkServiceConfig {
@@ -27,6 +28,18 @@ export class LinkService {
             },
             body: JSON.stringify({
                 url: url
+            })
+        });
+    }
+    
+    async bulkDeleteLinks(shortCodes: string[]): Promise<void> {
+        await fetch(`${this.endpoint}/api/link/batch-delete`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                shortcodes: shortCodes
             })
         });
     }

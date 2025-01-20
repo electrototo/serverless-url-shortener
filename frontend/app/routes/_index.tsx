@@ -29,7 +29,7 @@ export async function action({ params, request }: ActionFunctionArgs) {
 
   invariant(url, 'URL is not defined');
 
-  await Promise.all(url.map(entry => linkService.deleteLink(btoa(entry))));
+  await linkService.bulkDeleteLinks(url);
 
   return {};
 }

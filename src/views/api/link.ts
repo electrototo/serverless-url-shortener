@@ -58,6 +58,17 @@ router.post('/', async (req, res) => {
     res.send(JSON.stringify(output));
 });
 
+const BatchDeleteInputSchema = z.object({
+    shortcodes: z.array(z.string())
+});
+
+router.post('/batch-delete', async (req, res) => {
+    const input = BatchDeleteInputSchema.parse(req.body);
+    await linkController.bulkDelete(input.shortcodes);
+
+    res.status(200).send();
+});
+
 router.delete('/:shortcode', async (req, res) => {
     // Decode the B64 provided shortcode
     const shortcode = atob(req.params.shortcode);

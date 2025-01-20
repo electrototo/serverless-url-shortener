@@ -75,6 +75,10 @@ export class LinkController {
         }
     }
 
+    async bulkDelete(shortcodes: string[]): Promise<void> {
+        await DDBLink.delete(shortcodes.map(shortcode => ({ shortcode }))).go();
+    }
+
     async delete(shortcode: string): Promise<void> {
         // The pk of the table is the whole shortened link
         await DDBLink.delete({
